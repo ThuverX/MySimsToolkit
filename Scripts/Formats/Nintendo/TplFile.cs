@@ -5,61 +5,6 @@ using MySimsToolkit.Scripts.Extensions;
 
 namespace MySimsToolkit.Scripts.Formats.Nintendo;
 
-// enum ImageFormat : u32 {
-// I4 = 0,
-// I8 = 1,
-// IA4 = 2,
-// IA8 = 3,
-// RGB565 = 4,
-// RGB5A3 = 5,
-// RGBA8 = 6,
-// };
-//
-// struct RGB5A3 {
-//     be u16 col;
-// };
-//
-// struct ImageHeader {
-//     be u16 height;
-//     be u16 width;
-//     be ImageFormat format;
-//     be u32 imageDataOffset;
-//     be u32 wraps;
-//     be u32 wrapt;
-//     be u32 minfilter;
-//     be u32 magfilter;
-//     float lodBias;
-//     be u8 edgeLodEnable;
-//     be u8 minLod;
-//     be u8 maxLod;
-//     be u8 unpacked;
-//     u64 jump = $;
-//     
-//         $ = imageDataOffset;
-//     RGB5A3 pixels[width * height];
-//     
-//         $ = jump;
-// };
-//
-// struct Image {
-//     ImageHeader header;
-// };
-//
-// struct ImageTableItem {
-//     Image* image : be u32;
-//     be u32 paletteHeaderOffset;
-// };
-//
-// struct TplFile {
-//     be u32 version;
-//     be u32 count;
-//     be u32 tableOffset;
-//     $ = tableOffset;
-//     ImageTableItem images[count];
-// };
-//
-// TplFile file @ $;
-
 public class TplFile
 {
     public List<TplImage> TplImages { get; set; } = [];
