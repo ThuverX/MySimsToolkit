@@ -1,0 +1,73 @@
+[gd_scene load_steps=20 format=3 uid="uid://dd4qgusle5qo3"]
+
+[ext_resource type="Script" uid="uid://b3loge8080lye" path="res://Scripts/UI/UiRoot.cs" id="1_3mqji"]
+[ext_resource type="FontFile" uid="uid://qvgtlci01kb6" path="res://Fonts/Roboto-Regular.ttf" id="2_rf2cd"]
+[ext_resource type="FontFile" uid="uid://gmh7i5anvcnb" path="res://Fonts/RobotoMono-Regular.ttf" id="4_5crlr"]
+[ext_resource type="FontFile" uid="uid://ccjc580pml6af" path="res://Fonts/Roboto-Bold.ttf" id="4_rf2cd"]
+[ext_resource type="FontFile" uid="uid://bihp7r0d4ccxs" path="res://Fonts/lucide.ttf" id="5_hbc2u"]
+[ext_resource type="Script" uid="uid://cso561naytcbe" path="res://Scripts/Camera/FreeLookCameraBase.cs" id="6_a814b"]
+[ext_resource type="Script" uid="uid://bcxuu8bt3gr7n" path="res://Scripts/UI/Views/Browser/BrowserView.cs" id="6_torvr"]
+[ext_resource type="Script" uid="uid://dolxyus1f0by2" path="res://Scripts/UI/Views/Saves/SaveEditorView.cs" id="7_mctxq"]
+[ext_resource type="Script" uid="uid://2s1p1v5jdnwl" path="res://Scripts/UI/Views/HomeView.cs" id="8_8xkvn"]
+[ext_resource type="Script" uid="uid://0l2apdnw4fef" path="res://Scripts/Camera/OrbitCamera.cs" id="8_hbc2u"]
+[ext_resource type="Texture2D" uid="uid://8ibe7wq0prco" path="res://Images/background_cozy_bundle.jpg" id="9_p5x2j"]
+[ext_resource type="Texture2D" uid="uid://cbvsnbacrlaxq" path="res://Images/cozy-bundle.png" id="10_yvb8b"]
+[ext_resource type="Texture2D" uid="uid://bwrqoud52bcig" path="res://Images/cozy-bundle-kingdom.png" id="11_3hf6u"]
+[ext_resource type="Texture2D" uid="uid://j37bbfv8iaak" path="res://Images/MSPlumbob_black.png" id="12_mctxq"]
+[ext_resource type="Texture2D" uid="uid://cdrihshsifwqa" path="res://Images/search.png" id="13_mctxq"]
+
+[sub_resource type="World3D" id="World3D_hbc2u"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5crlr"]
+
+[sub_resource type="Sky" id="Sky_hbc2u"]
+sky_material = SubResource("ProceduralSkyMaterial_5crlr")
+
+[sub_resource type="Environment" id="Environment_torvr"]
+background_mode = 2
+sky = SubResource("Sky_hbc2u")
+
+[node name="MainScene" type="Node3D"]
+
+[node name="UIRoot" type="Node" parent="." node_paths=PackedStringArray("BrowserView", "SaveEditorView", "HomeView")]
+script = ExtResource("1_3mqji")
+RobotoRegular = ExtResource("2_rf2cd")
+RobotoMono = ExtResource("4_5crlr")
+RobotoBold = ExtResource("4_rf2cd")
+Lucide = ExtResource("5_hbc2u")
+BrowserView = NodePath("Browser")
+SaveEditorView = NodePath("Saves")
+HomeView = NodePath("Home")
+
+[node name="Browser" type="Node" parent="UIRoot"]
+script = ExtResource("6_torvr")
+
+[node name="Saves" type="Node" parent="UIRoot"]
+script = ExtResource("7_mctxq")
+
+[node name="Home" type="Node" parent="UIRoot"]
+script = ExtResource("8_8xkvn")
+Textures = Dictionary[String, Texture2D]({
+"cozy_bundle": ExtResource("9_p5x2j"),
+"cozy_bundle_icon": ExtResource("10_yvb8b"),
+"cozy_bundle_kingdom_icon": ExtResource("11_3hf6u"),
+"mysims_2007_icon": ExtResource("12_mctxq"),
+"og_icon": ExtResource("12_mctxq"),
+"search_icon": ExtResource("13_mctxq")
+})
+
+[node name="SubViewport" type="SubViewport" parent="."]
+own_world_3d = true
+world_3d = SubResource("World3D_hbc2u")
+render_target_update_mode = 4
+
+[node name="FreeCam" type="Camera3D" parent="SubViewport"]
+environment = SubResource("Environment_torvr")
+script = ExtResource("6_a814b")
+
+[node name="OrbitCamera" type="Camera3D" parent="SubViewport"]
+environment = SubResource("Environment_torvr")
+script = ExtResource("8_hbc2u")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewport"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
