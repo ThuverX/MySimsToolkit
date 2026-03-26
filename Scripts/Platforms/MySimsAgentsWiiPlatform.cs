@@ -86,6 +86,5 @@ public class MySimsAgentsWiiPlatform : GamePlatform
 
     public override void MountSaveFileSystems(SaveService saves)
     {
-        throw new System.NotImplementedException();
     }
 }

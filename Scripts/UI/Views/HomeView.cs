@@ -25,7 +25,7 @@ public partial class HomeView : View
         new ("MySims Cozy Bundle", "cozy_bundle_icon", GameType.MySimsCozyBundlePc),
         new ("MySims Kingdom Cozy Bundle", "cozy_bundle_kingdom_icon", GameType.MySimsKingdomCozyBundlePc),
         new ("MySims (2008)", "og_icon", GameType.MySimsPc),
-        new ("MySims Agents (Wii)", "og_icon", GameType.MySimsAgentsWii),
+        new ("MySims Agents (Wii)", "agents_wii", GameType.MySimsAgentsWii),
     ];
     
     public override void Draw(double dt)
@@ -57,7 +57,7 @@ public partial class HomeView : View
         
         Grid.BeginItemRaw();
         
-        if(BigButton("Detect game", "search_icon", size, false)) {
+        if(BigButton("Detect game", "search_icon", size, false, true)) {
             var dialog = NativeFileDialogSharp.Dialog.FileOpen("exe,dol,bnr");
             if (dialog.IsOk)
             {
@@ -70,7 +70,7 @@ public partial class HomeView : View
         Grid.End();
     }
     
-    public unsafe bool BigButton(string text, string texture, Vector2 inSize, bool active)
+    public unsafe bool BigButton(string text, string texture, Vector2 inSize, bool active, bool tint = false)
     {
         if(inSize.X == 0)
             inSize.X = ImGui.CalcTextSize(text).X + Style.RootSize;
@@ -108,7 +108,7 @@ public partial class HomeView : View
             (IntPtr)tex.GetRid().Id,
             imgpos, imgpos + imgsize,
             Vector2.Zero,
-            Vector2.One, 0xFFFFFFFF);
+            Vector2.One, !hovered && tint ? Style.ActiveTheme.Primary.ToHex() : Style.ActiveTheme.Background.ToHex());
         ImGui.PopClipRect();
 
         var topleft = pos + new Vector2(Util.GetGap(), Util.GetGap()) * 4;

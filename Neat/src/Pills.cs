@@ -4,9 +4,9 @@ using Neat.Extensions;
 
 namespace Neat;
 
-public static class Pills
+public static unsafe class Pills
 {
-    public static unsafe void Default(string text)
+    public static  void Default(string text)
     {
         var pos = ImGui.GetCursorScreenPos();
         ImGui.PushFont(Fonts.RobotoTiny);

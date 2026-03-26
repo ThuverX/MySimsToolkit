@@ -48,7 +48,6 @@ public static unsafe class Input
     public static void Label(string label)
     {
         Neat.Text.Default(label);
-        ImGui.SameLine();
     }
 
     private static void PostAmble(string? input, string? placeHolder, Vector2 textPos, Vector2 pos, Vector2 size)

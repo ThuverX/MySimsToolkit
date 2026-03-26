@@ -11,6 +11,9 @@ namespace MySimsToolkit.Scripts.UI.Views.Saves;
 public partial class SaveEditorView : View
 {
     private SaveService.SaveFileData _currentSave;
+    
+    private readonly ISaveView _saveView = new MySimsSaveEditorView();
+    
     public override void Draw(double dt)
     {
         var avail = ImGui.GetContentRegionAvail();
@@ -21,7 +24,8 @@ public partial class SaveEditorView : View
         Grid.Begin(1, 70, 8);
         foreach (var saveFileData in SaveService.Instance.Saves)
         {
-            Grid.BeginItem(active: _currentSave?.Equals(saveFileData) ?? false);
+            var active = _currentSave?.Equals(saveFileData) ?? false;
+            Grid.BeginItem(active: active);
             
             var startPos = ImGui.GetCursorScreenPos();
             var cellSize = Grid.GetCellSize();
@@ -29,13 +33,14 @@ public partial class SaveEditorView : View
             ImGui.Dummy(new Vector2(8,8));
             ImGui.Dummy(new Vector2(8,1));
             ImGui.SameLine();
-            Text.Title(saveFileData.Name);
+            Text.TitleColored(saveFileData.Name, active ? Style.ActiveTheme.White : Style.ActiveTheme.Text);
             ImGui.Dummy(new Vector2(8,1));
             ImGui.SameLine();
-            Text.Default(saveFileData.PlayerName);
+            Text.TextColored(saveFileData.PlayerName, active ? Style.ActiveTheme.White : Style.ActiveTheme.Text);
             if (Grid.EndItem(out var hover))
             {
                 _currentSave = saveFileData;
+                _saveView.Load(saveFileData);
             }
             
             if (hover)
@@ -51,8 +56,9 @@ public partial class SaveEditorView : View
         ImGui.BeginChild("__save_editor_view", new Vector2(splitRight, avail.Y));
         if (RuntimeRoot.Instance.GameType == GameType.MySimsCozyBundlePc || RuntimeRoot.Instance.GameType == GameType.MySimsPc)
         {
-            MySimsSaveEditor.Draw(dt, _currentSave);
+            _saveView.Draw(dt);
         }
+        
         ImGui.EndChild();
     }
 }

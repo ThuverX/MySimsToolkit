@@ -153,7 +153,6 @@ public class MySimsKingdomCozyBundlePcPlatform : GamePlatform
 
     public override void MountSaveFileSystems(SaveService saves)
     {
-        throw new NotImplementedException();
     }
 
     private Task<IMaterial> MaterialLoader(IFileSystem.FileId fileId)

@@ -65,7 +65,7 @@ public partial class BrowserView : View
         }
 
         var avail = ImGui.GetContentRegionAvail();
-        var splitPerc = false ? 0.7f : 1;
+        var splitPerc = Root.InspectorView.IsOpen() ? 0.7f : 1;
         var splitLeft = avail.X * splitPerc;
         var splitRight = avail.X * (1f - splitPerc);
 
@@ -156,7 +156,8 @@ public partial class BrowserView : View
                     
                     if(fileType.Equals(PackageType)) continue;
 
-                    Grid.BeginItem(false);
+                    var active = Root.InspectorView.ActiveFile == file.Id;
+                    Grid.BeginItem(false, active: active);
                     var startPos = ImGui.GetCursorScreenPos();
                     var cellSize = Grid.GetCellSize();
                     ImGui.Dummy(new Vector2(Util.GetGap()));
@@ -169,7 +170,7 @@ public partial class BrowserView : View
                     ImGui.Dummy(new Vector2(Util.GetGap()));
                     ImGui.SameLine();
                     ImGui.PushFont(Fonts.MediumIcons);
-                    ImGui.TextColored(Style.ActiveTheme.BorderControl, fileType.Icon);
+                    ImGui.TextColored(!active ? Style.ActiveTheme.BorderControl : Style.ActiveTheme.White, fileType.Icon);
                     ImGui.PopFont();
                     ImGui.SetCursorScreenPos(pos);
 
@@ -194,13 +195,13 @@ public partial class BrowserView : View
 
                         ImGui.Dummy(new Vector2(widthAvail / 2 - textWidth / 2, 0));
                         ImGui.SameLine();
-                        Text.Default(displayFilename);
+                        Text.TextColored(displayFilename, !active ? Style.ActiveTheme.Black : Style.ActiveTheme.White);
                         ImGui.PopFont();
                     }
 
                     if (Grid.EndItem(out var hover))
                     {
-                        // InspectorUi.ActiveFileId = file.Id;
+                        Root.InspectorView.Open(file.Id);
                     }
 
                     if (hover)
@@ -219,14 +220,14 @@ public partial class BrowserView : View
         }
         ImGui.EndChild();
 
-        // if (InspectorUi.ActiveFileId != null)
-        // {
-        //     ImGui.SameLine();
-        //     Util.VerticalSeperator();
-        //     ImGui.SameLine();
-        //     ImGui.BeginChild("__inspector_pane", new Vector2(splitRight - Util.GetGap() * 4, avail.Y));
-        //     InspectorUi.Draw(delta);
-        //     ImGui.EndChild();
-        // }
+        if (Root.InspectorView.IsOpen())
+        {
+            ImGui.SameLine();
+            Util.VerticalSeperator();
+            ImGui.SameLine();
+            ImGui.BeginChild("__inspector_pane", new Vector2(splitRight - Util.GetGap() * 4, avail.Y));
+            Root.InspectorView.Draw(delta);
+            ImGui.EndChild();
+        }
     }
 }

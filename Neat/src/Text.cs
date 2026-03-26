@@ -9,11 +9,24 @@ public class Text
     {
         ImGui.Text(text ?? string.Empty);
     }
+    
+    public static void TextColored(string text, Vector4 color)
+    {
+        ImGui.TextColored(color, text ?? string.Empty);
+    }
+
 
     public static void Title(string text)
     {
         ImGui.PushFont(Fonts.RobotoBig);
         Default(text);
+        ImGui.PopFont();
+    }
+    
+    public static void TitleColored(string text, Vector4 color)
+    {
+        ImGui.PushFont(Fonts.RobotoBig);
+        TextColored(text, color);
         ImGui.PopFont();
     }
 

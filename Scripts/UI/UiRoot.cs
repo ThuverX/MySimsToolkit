@@ -21,6 +21,7 @@ public partial class UiRoot : Node
     [Export] public BrowserView BrowserView;
     [Export] public SaveEditorView SaveEditorView;
     [Export] public HomeView HomeView;
+    [Export] public InspectorView InspectorView;
 
     private string _currentPage = "Home";
     
@@ -52,6 +53,7 @@ public partial class UiRoot : Node
         BrowserView.SetUiRoot(this);
         SaveEditorView.SetUiRoot(this);
         HomeView.SetUiRoot(this);
+        InspectorView.SetUiRoot(this);
     }
 
     public void OpenPage(string page)
@@ -108,8 +110,12 @@ public partial class UiRoot : Node
         
         Window.BeginRootWindow();
         
+        if(RuntimeRoot.Instance.GameType != GameType.None && _currentPage == "Home")
+            OpenPage("Saves");
+        
         Tabs.BeginTabs();
-        Tabs.TabItem(ref _currentPage, "Home");
+        if(RuntimeRoot.Instance.GameType == GameType.None)
+            Tabs.TabItem(ref _currentPage, "Home");
         Tabs.TabItem(ref _currentPage, "Saves");
         Tabs.TabItem(ref _currentPage, "Assets");
         Tabs.TabItem(ref _currentPage, "Strings");
@@ -127,7 +133,6 @@ public partial class UiRoot : Node
                 BrowserView.Draw(delta);
                 break;
         }
-        
         
         Window.EndRootWindow();
     }
