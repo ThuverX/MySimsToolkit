@@ -68,6 +68,7 @@ public abstract class GamePlatform
     public abstract bool IsValidPath(string path);
     public abstract void MountFileSystems(FileSystemService fileSystem);
     public abstract void RegisterAssetLoaders(AssetService assets);
+    public abstract void RegisterAssetExporters(ExporterService assets);
     public abstract void RegisterAssetTypes(FileSystemService fileSystem);
     
 

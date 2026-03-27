@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Godot;
@@ -16,8 +17,9 @@ public class AssetService
     {
         private int _refCount = 1;
 
-        internal Task<T> Task => Tcs.Task;
-        internal readonly TaskCompletionSource<T> Tcs =
+        private Task<T> Task => _tcs.Task;
+
+        private readonly TaskCompletionSource<T> _tcs =
             new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         public AssetState State { get; private set; } = AssetState.Loading;
@@ -33,7 +35,7 @@ public class AssetService
 
             Value = value;
             State = AssetState.Ready;
-            Tcs.SetResult(value);
+            _tcs.SetResult(value);
             Completed?.Invoke(this);
         }
 
@@ -43,7 +45,7 @@ public class AssetService
 
             Error = ex;
             State = AssetState.Failed;
-            Tcs.SetException(ex);
+            _tcs.SetException(ex);
             Completed?.Invoke(this);
         }
 

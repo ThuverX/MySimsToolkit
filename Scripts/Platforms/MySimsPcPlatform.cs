@@ -91,7 +91,11 @@ public class MySimsPcPlatform : GamePlatform
         assets.RegisterLoader(MaterialLoader);
         assets.RegisterLoader(MaterialSetLoader);
     }
-    
+
+    public override void RegisterAssetExporters(ExporterService assets)
+    {
+    }
+
     public override void RegisterAssetTypes(FileSystemService fileSystem)
     {
         fileSystem.FileTypes.AddRange([

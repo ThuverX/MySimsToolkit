@@ -16,6 +16,7 @@ public class RuntimeContext : IDisposable
     public GamePlatform Platform { get; }
     public FileTranslatorService Translator { get; }
     public SaveService Saves { get; }
+    public ExporterService Exporter { get; }
     
     public RuntimeContext(GamePlatform platform, string rootPath)
     {
@@ -28,10 +29,12 @@ public class RuntimeContext : IDisposable
         Shaders = new ShaderService();
         Thumbnails = new ThumbnailService();
         Saves = new SaveService();
+        Exporter = new ExporterService();
 
         Platform.RegisterTranslator(Translator);
         Platform.MountFileSystems(FileSystem);
         Platform.RegisterAssetLoaders(Assets);
+        Platform.RegisterAssetExporters(Exporter);
         Platform.RegisterAssetTypes(FileSystem);
         Platform.RegisterThumbnailHandlers(Thumbnails);
         Platform.MountSaveFileSystems(Saves);

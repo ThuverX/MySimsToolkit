@@ -68,8 +68,6 @@ public static class TextureLoader
                     throw new ArgumentOutOfRangeException(nameof(imageType), imageType, null);
             }
             
-            image.SavePng("E:/export/" + fileId + ".png");
-
             return (Texture2D)ImageTexture.CreateFromImage(image);
         });
     }

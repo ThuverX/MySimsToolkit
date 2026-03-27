@@ -159,6 +159,11 @@ public static unsafe class Util
         drawList.PathFillConvex(color);
     }
 
+    public static void Gap()
+    {
+        ImGui.Dummy(new Vector2(0, GetGap()));
+    }
+
     private static int _indent = 0;
 
     public static int GetIndent() => _indent;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using MySimsToolkit.Scripts.AssetExporters;
 using MySimsToolkit.Scripts.AssetFileTypes;
 using MySimsToolkit.Scripts.AssetLoaders;
 using MySimsToolkit.Scripts.Formats.FileSystem;
@@ -57,6 +58,12 @@ public class MySimsAgentsWiiPlatform : GamePlatform
     public override void RegisterAssetLoaders(AssetService assets)
     {
         assets.RegisterLoader(TextureLoader.Create(TextureLoader.ImageType.Tpl));
+    }
+
+    public override void RegisterAssetExporters(ExporterService exporter)
+    {
+        exporter.RegisterExporter(new TplType(), ".dds", TextureExporter.Create(TextureLoader.ImageType.Dds));
+        exporter.RegisterExporter(new TplType(), ".png", TextureExporter.Create(TextureLoader.ImageType.Png));
     }
 
     public override void RegisterAssetTypes(FileSystemService fileSystem)

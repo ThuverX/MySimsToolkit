@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Godot;
 using ImGuiGodot;
 using ImGuiNET;
@@ -7,7 +8,6 @@ using MySimsToolkit.Scripts.AssetFileTypes;
 using MySimsToolkit.Scripts.Formats.FileSystem;
 using MySimsToolkit.Scripts.Services;
 using Neat;
-using Neat.Extensions;
 using Button = Neat.Button;
 using Vector2 = System.Numerics.Vector2;
 
@@ -34,6 +34,8 @@ public partial class InspectorView : View
         Text.Title(_displayFilename);
         Util.Seperator();
         
+        Util.Gap();
+        
         var pos = ImGui.GetCursorScreenPos();
         
         if (ThumbnailService.Instance.HasThumbnail(_activeFile))
@@ -42,19 +44,25 @@ public partial class InspectorView : View
             ImGui.SetCursorScreenPos(pos + new Vector2(ImGui.GetContentRegionAvail().X / 2 - size / 2, 0));
             ImGuiGD.Image(ThumbnailService.Instance.GetThumbnail(_activeFile), new Vector2(size));
             Util.Seperator();
+            Util.Gap();
         }
         
         Pills.Default(_fileType.Name);
         ImGui.SameLine();
 
         Pills.Default(GetBytesReadable(_stat.Size));
+        
+        Util.Gap();
+        
         Text.Default(_fileType.Description);
+        
+        Util.Gap();
         
         var halfWidth = avail.X / 2 - Util.GetGap();
 
-        if (Button.Default("Save", width: halfWidth))
+        if (Button.Default("Export", width: halfWidth))
         {
-            Save();
+            Export();
         }
         ImGui.SameLine();
         if (Button.Default("Save Raw", width: halfWidth))
@@ -100,15 +108,11 @@ public partial class InspectorView : View
         readable = (readable / 1024);
         return readable.ToString("0.### ") + suffix;
     }
-
-
+    
     private void SaveRaw()
     {
-        if (_fileType.Extensions.Length <= 0)
-        {
-            throw new Exception("File type not supported");
-        }
-        var dialog = NativeFileDialogSharp.Dialog.FileSave(_fileType.Extensions[0][1..]);
+        var ext = _fileType.Extensions.Length <= 0 ? (_extension.Length > 0 ? _extension[1..] : "bin") : _fileType.Extensions[0][1..];
+        var dialog = NativeFileDialogSharp.Dialog.FileSave(ext);
         if (!dialog.IsOk) return;
         
         using var stream = FileSystemService.Instance.OpenRead(_activeFile);
@@ -116,12 +120,18 @@ public partial class InspectorView : View
         stream.CopyTo(fileStream);
     }
 
-    private void Save()
+    private void Export()
     {
-        var dialog = NativeFileDialogSharp.Dialog.FileSave();
+        if (ExporterService.Instance.GetOptions(_fileType).Length <= 0)
+        {
+            // TODO: Popup a message
+            return;
+        }
+        
+        var dialog = NativeFileDialogSharp.Dialog.FileSave(ExporterService.Instance.GetOptions(_fileType).Join(",").Replace(".", ""));
         if (dialog.IsOk)
         {
-            // TODO: Implement converters
+            ExporterService.Instance.Export(_fileType, _activeFile, dialog.Path);
         }
     }
     

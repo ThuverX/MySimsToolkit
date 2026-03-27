@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Godot;
+using MySimsToolkit.Scripts.AssetExporters;
 using MySimsToolkit.Scripts.AssetFileTypes;
 using MySimsToolkit.Scripts.AssetLoaders;
 using MySimsToolkit.Scripts.Extensions;
@@ -129,7 +130,13 @@ public class MySimsCozyBundlePcPlatform : GamePlatform
         assets.RegisterLoader(MaterialLoader);
         assets.RegisterLoader(MaterialSetLoader);
     }
-    
+
+    public override void RegisterAssetExporters(ExporterService exporter)
+    {
+        exporter.RegisterExporter(new DdsType(), ".png", TextureExporter.Create(TextureLoader.ImageType.Png));
+        exporter.RegisterExporter(new DdsType(), ".dds", TextureExporter.Create(TextureLoader.ImageType.Dds));
+    }
+
     public override void RegisterAssetTypes(FileSystemService fileSystem)
     {
         fileSystem.FileTypes.AddRange([
